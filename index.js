@@ -6,41 +6,35 @@ const db = require("./config/db.config.js");
 const app = express();
 const port = process.env.PORT || 3005;
 
-//Helmet is a middleware package. It can set appropriate HTTP headers that help protect your app from well-known web vulnerabilities
-// var helmet = require('helmet');
-// var compression = require('compression');
 const cors = require('cors');
 
-
+var excel_compare = require("excel-compare");
 //Json Middleware
-// app.use(express.json());
-// // app.use(express.urlencoded({ extended: true }))
-// app.use(bodyParser.json())
-// app.use(bodyParser.urlencoded({ extended: true }))
-// app.use('/image', express.static('image'))
-// app.use(compression());
-// app.use(helmet.frameguard({
-//     action: "deny",
-// }));
-// app.use(
-//     helmet.hsts({
-//         maxAge: 86400,
-//         includeSubDomains: false,
-//     })
-// );
-// app.use(helmet.hidePoweredBy());
-// app.use(helmet.ieNoOpen());
-// app.use(helmet.noSniff());
-// app.use(helmet.xssFilter());
-// app.use(cors({
-//     origin: '*'
-// }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }))
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+
+
 
 // here we import the routes file.
 const userRouter = require("./routes/userRoutes");
 
 app.use("/api/v1/user", userRouter);
 
+
+excel_compare({
+    file1: 'data/abc.xlsx', // file1 is the main excel to compare with
+    file2: 'data/anshu.xlsx', // file2 is the file for compare
+    column_file1: {
+        column: [1],
+        join: ''
+    },
+    column_file2: {
+        column: [1, 2],
+        join: '-'
+    }
+})
 
 //PORT Listening
 app.listen(port, () => {
